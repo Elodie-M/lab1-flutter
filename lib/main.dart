@@ -39,18 +39,22 @@ class _MyHomePageState extends State<MyHomePage> {
 
   bool get _isRunning => _timer?.isActive ?? false;
 
-void _toggleStartStop() {
+
+void _toggleTimer() {
     if (_isRunning) {
       _timer?.cancel();
-      setState(() {});
-    } else {
-      _timer = Timer.periodic(const Duration(seconds: 1), (t) {
-        setState(() => _seconds++);
+      setState(() {
+        _seconds = 0;
       });
-      setState(() {});
+    } else {
+      _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+        setState(() {
+          _seconds++;
+        });
+      });
     }
   }
-  
+
   @override
   void dispose() {
     _timer?.cancel();
@@ -83,7 +87,7 @@ void _toggleStartStop() {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors. blueAccent, 
-        onPressed: _toggleStartStop,
+        onPressed: _toggleTimer,
         child: Icon(_isRunning ? Icons.stop : Icons.play_arrow),
       ),
     );

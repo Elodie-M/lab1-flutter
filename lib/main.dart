@@ -86,7 +86,7 @@ void _toggleTimer() {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors. blueAccent, 
+        backgroundColor: _isRunning ? Colors.redAccent : Colors.blue,
         onPressed: _toggleTimer,
         child: Icon(_isRunning ? Icons.stop : Icons.play_arrow),
       ),

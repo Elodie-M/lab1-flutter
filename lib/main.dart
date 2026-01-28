@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 void main() {
@@ -14,7 +16,7 @@ class MyApp extends StatelessWidget {
       title: 'Lab 1',
       theme: ThemeData(
         
-        colorScheme: .fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: .fromSeed(seedColor: Colors.blueAccent),
       ),
       home: const MyHomePage(title: 'Lab N1'),
     );
@@ -32,41 +34,57 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  Timer? _timer;
+  int _seconds = 0;
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+  bool get _isRunning => _timer?.isActive ?? false;
+
+void _toggleStartStop() {
+    if (_isRunning) {
+      _timer?.cancel();
+      setState(() {});
+    } else {
+      _timer = Timer.periodic(const Duration(seconds: 1), (t) {
+        setState(() => _seconds++);
+      });
+      setState(() {});
+    }
+  }
+  
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-  
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        backgroundColor: Colors.blue, 
         title: Text(widget.title),
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: .center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Timer:', 
-            style: TextStyle(height: 1, fontSize: 40)),
+            const Text(
+              'Timer:',
+              style: TextStyle(height: 1, fontSize: 40),
+            ),
+            const SizedBox(height: 14),
+            Text(
+              '$_seconds',
+              style: const TextStyle(height: 1, fontSize: 20),
+            ),
           ],
         ),
       ),
-      floatingActionButton: Row(
-        mainAxisAlignment:MainAxisAlignment.center,
-        children: [
-          FloatingActionButton(
-            onPressed: _incrementCounter,
-            tooltip: 'Increment',
-            child: const Icon(Icons.play_circle),
-          ),
-          //SizedBox(width: 10),
-        ],
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors. blueAccent, 
+        onPressed: _toggleStartStop,
+        child: Icon(_isRunning ? Icons.stop : Icons.play_arrow),
       ),
     );
   }
